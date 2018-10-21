@@ -5,10 +5,10 @@ authors = ["Lukáš Hozda <luk.hozda@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-rocket_codegen = "0.3.15"
-rocket = "0.3.15"
+rocket = "0.3.17"
+rocket_codegen = "0.3.17"
+reqwest = "0.9.3"
 
 [dependencies.rocket_contrib]
-version = "0.3.15"
-features = ["json"]
-
+version = "0.3.17"
+features = ["tera_templates"]
