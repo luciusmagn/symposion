@@ -6,6 +6,7 @@ edition = "2018"
 
 [dependencies]
 rocket_codegen = "0.3.17"
+rocket_cors = "0.3.0"
 rpassword = "2.0.0"
 serde_derive = "1"
 rocket = "0.3.17"
