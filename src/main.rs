@@ -8,6 +8,7 @@ extern crate rand;
 extern crate rocket;
 extern crate reqwest;
 extern crate rpassword;
+extern crate rocket_cors;
 extern crate rocket_contrib;
 #[macro_use] extern crate lazy_static;
 
@@ -20,9 +21,11 @@ use rand::distributions::Alphanumeric;
 use rocket_contrib::{Template, Json};
 use rocket::http::{ContentType, Status};
 use rocket::response::{NamedFile, Response};
+use rocket_cors::{AllowedOrigins, AllowedHeaders};
 
 use std::iter;
 use std::sync::RwLock;
+use std::str::FromStr;
 use std::fs::{File, rename};
 use std::io::{Cursor, Write};
 use std::path::{PathBuf, Path};
@@ -197,6 +200,22 @@ fn main() {
 	*hash = rpassword::prompt_password_stdout("Hash pro autentifikaci: ").unwrap();
 	drop(hash);
 
+	let cors = rocket_cors::Cors {
+		allowed_origins: AllowedOrigins::all(),
+		allowed_methods: vec![
+			"options",
+			"delete",
+			"patch",
+			"trace",
+			"post",
+			"get",
+			"put",
+		].into_iter().map(|s| FromStr::from_str(s).unwrap()).collect(),
+		allowed_headers: AllowedHeaders::all(),
+		allow_credentials: true,
+		..Default::default()
+	};
+
 	rocket::ignite().mount("/", routes![
 			static_server,
 			harmonogram,
@@ -207,6 +226,7 @@ fn main() {
 			login,
 			index])
 		.attach(Template::fairing())
+		.attach(cors)
 		.launch();
 }
 
