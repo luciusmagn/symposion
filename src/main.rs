@@ -176,7 +176,13 @@ pub fn approve<'a>(name: String, token: Json<String>) -> Response<'a> {
 	}
 }
 
-
+/* |
+ * |
+ * |  Takhle se přidávaj templaty, viz Tera templating engine
+ * |
+ * |
+ * v
+ */
 
 /// Posílá template indexu
 #[get("/")]
