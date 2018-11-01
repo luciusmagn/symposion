@@ -88,10 +88,14 @@ pub fn logout<'a>(input: Json<String>) {
 /// Posílá informace z harmonogramové tabulky
 #[get("/harmonogram", format = "application/json")]
 pub fn harmonogram<'a>() -> Response<'a> {
-	if let Ok(res) = reqwest::get("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ").expect("failed to send request").text() {
+	if let (Ok(ctvrtek), Ok(patek), Ok(sobota)) =
+		(reqwest::get("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ&sheet=1").expect("failed to send request").text()
+		,reqwest::get("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ&sheet=2").expect("failed to send request").text()
+		,reqwest::get("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ&sheet=3").expect("failed to send request").text())
+	{
 		Response::build()
 			.header(ContentType::JSON)
-			.sized_body(Cursor::new(res))
+			.sized_body(Cursor::new(format!("{{ \"ctvrtek\": {}, \"patek\": {}, \"sobota\": {} }}", ctvrtek, patek, sobota)))
 			.finalize()
 	} else {
 		Response::build()
