@@ -29,6 +29,7 @@ use std::fs::{File, rename};
 use std::io::{Cursor, Write};
 use std::path::{PathBuf, Path};
 use std::collections::HashMap;
+use std::process::{Command, Stdio};
 
 pub mod util;
 
@@ -88,9 +89,9 @@ pub fn logout<'a>(input: Json<String>) {
 #[get("/harmonogram", format = "application/json")]
 pub fn harmonogram<'a>() -> Response<'a> {
 	if let (Ok(ctvrtek), Ok(patek), Ok(sobota)) =
-		(chttp::get("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ&sheet=1").unwrap().body_mut().text()
-		,chttp::get("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ&sheet=2").unwrap().body_mut().text()
-		,chttp::get("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ&sheet=3").unwrap().body_mut().text())
+		(String::from_utf8(Command::new("curl").arg("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ&sheet=1").stdout(Stdio::piped()).output().unwrap().stdout)
+		,String::from_utf8(Command::new("curl").arg("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ&sheet=2").stdout(Stdio::piped()).output().unwrap().stdout)
+		,String::from_utf8(Command::new("curl").arg("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ&sheet=3").stdout(Stdio::piped()).output().unwrap().stdout))
 	{
 		Response::build()
 			.header(ContentType::JSON)
