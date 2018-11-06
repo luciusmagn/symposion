@@ -233,4 +233,3 @@ fn main() {
 		.attach(cors)
 		.launch();
 }
-
