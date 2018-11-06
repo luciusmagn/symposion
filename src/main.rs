@@ -6,7 +6,6 @@
 extern crate ring;
 extern crate rand;
 extern crate rocket;
-extern crate reqwest;
 extern crate rpassword;
 extern crate rocket_cors;
 extern crate rocket_contrib;
@@ -89,9 +88,9 @@ pub fn logout<'a>(input: Json<String>) {
 #[get("/harmonogram", format = "application/json")]
 pub fn harmonogram<'a>() -> Response<'a> {
 	if let (Ok(ctvrtek), Ok(patek), Ok(sobota)) =
-		(reqwest::get("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ&sheet=1").expect("failed to send request").text()
-		,reqwest::get("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ&sheet=2").expect("failed to send request").text()
-		,reqwest::get("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ&sheet=3").expect("failed to send request").text())
+		(chttp::get("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ&sheet=1").unwrap().body_mut().text()
+		,chttp::get("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ&sheet=2").unwrap().body_mut().text()
+		,chttp::get("http://gsx2json.com/api?id=12Q1jmsBpZh1LHSAcMwXIwWTZwKMzFoypw_fUrDbWJEQ&sheet=3").unwrap().body_mut().text())
 	{
 		Response::build()
 			.header(ContentType::JSON)
@@ -103,6 +102,7 @@ pub fn harmonogram<'a>() -> Response<'a> {
 			.sized_body(Cursor::new("Internal Server Error"))
 			.finalize()
 	}
+
 }
 
 /// Vrací daný obsah

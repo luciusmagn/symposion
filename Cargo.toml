@@ -5,17 +5,17 @@ authors = ["Lukáš Hozda <luk.hozda@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-rocket_codegen = "=0.3.12"
-rocket_cors = "=0.2.3"
+rocket_codegen = "=0.3.17"
+rocket_cors = "=0.3.0"
 rpassword = "2.0.0"
 serde_derive = "1"
-rocket = "=0.3.12"
+rocket = "=0.3.17"
 lazy_static = "1"
-reqwest = "=0.8.0"
+chttp = "0.2.4"
 ring = "0.11"
 rand = "0.5"
 serde = "1"
 
 [dependencies.rocket_contrib]
 features = ["tera_templates"]
-version = "=0.3.12"
+version = "=0.3.17"
