@@ -202,7 +202,7 @@ pub fn index() -> Template {
 
 fn main() {
 	let mut hash = HASH.write().unwrap();
-	*hash = rpassword::prompt_password_stdout("Hash pro autentifikaci: ").unwrap();
+	*hash = "heslo".to_string();
 	drop(hash);
 
 	let cors = rocket_cors::Cors {
